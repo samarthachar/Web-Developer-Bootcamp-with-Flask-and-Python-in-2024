@@ -1,10 +1,20 @@
 import datetime
+from dotenv import load_dotenv # type: ignore
+import os
+
+
 from flask import Flask, render_template, request # type: ignore
 from pymongo import MongoClient # type: ignore
 
+
 def create_app():
     app = Flask(__name__)
-    client = MongoClient("mongodb+srv://<user>:<password>@<mongodb-server>/microblog")
+    
+    database_url = os.getenv("DATABASE_URL")
+
+    load_dotenv()
+
+    client = MongoClient(database_url)
     app.db = client.microblog
     @app.route("/", methods=["GET", "POST"])
     def home():
